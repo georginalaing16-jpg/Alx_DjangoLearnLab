@@ -22,8 +22,8 @@ def books_in_library(library_name):
 # Query 3: Retrieve the librarian for a library
 def librarian_for_library(library_name):
     library = Library.objects.get(name=library_name)
-    return library.librarian
-
+    librarian = Librarian.objects.get(library=library)
+    return librarian
 
 if __name__ == "__main__":
     print("Books by Author:")
