@@ -19,12 +19,14 @@ def book_list(request):
     })
 
 
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views import View
 from django.shortcuts import render
 
-def create_book(request):
-    # SECURITY: Check permission before allowing action
-    if not request.user.has_perm("bookshelf.can_create"):
-        raise PermissionDenied("You do not have permission to create a book.")
+class DeleteBookView(PermissionRequiredMixin, View):
+    permission_required = "bookshelf.can_delete"
+    raise_exception = True  # 👈 written here
 
-    return render(request, "bookshelf/form_example.html")
+    def get(self, request):
+        return render(request, "bookshelf/book_list.html")
+
