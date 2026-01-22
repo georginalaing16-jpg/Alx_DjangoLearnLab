@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Example</title>
+</head>
+<body>
+    <h2>Secure Form</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <!-- CSRF token prevents cross-site request forgery -->
+
+        {{ form.as_p }}
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
