@@ -17,3 +17,14 @@ def book_list(request):
         "books": books,
         "form": form
     })
+
+
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render
+
+def create_book(request):
+    # SECURITY: Check permission before allowing action
+    if not request.user.has_perm("bookshelf.can_create"):
+        raise PermissionDenied("You do not have permission to create a book.")
+
+    return render(request, "bookshelf/form_example.html")
