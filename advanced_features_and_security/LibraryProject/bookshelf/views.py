@@ -30,3 +30,11 @@ class DeleteBookView(PermissionRequiredMixin, View):
     def get(self, request):
         return render(request, "bookshelf/book_list.html")
 
+
+from .forms import ExampleForm
+from django.shortcuts import render
+
+def form_example(request):
+    form = ExampleForm()
+    return render(request, "bookshelf/form_example.html", {"form": form})
+
