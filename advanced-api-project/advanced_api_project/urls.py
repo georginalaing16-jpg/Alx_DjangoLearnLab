@@ -14,14 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-from .views import (BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView)
+# advanced_api_project/urls.py
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    path("books/", BookListView.as_view(), name="book-list"),  # URL for listing all books
-    path("books/", BookDetailView.as_view(), name="book-detail"),  # URL for retrieving a single book by its primary key (id)
-    path("books/create/", BookCreateView.as_view(), name="book-create"),  # URL for creating a new book
-    path("books/update/", BookUpdateView.as_view(), name="book-update"),  # URL for updating an existing book by its primary key (id)
-    path("books/delete/", BookDeleteView.as_view(), name="book-delete"),  # URL for deleting an existing book by its primary key (id)
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),  # include the URLs from the api app
 ]
+
  
