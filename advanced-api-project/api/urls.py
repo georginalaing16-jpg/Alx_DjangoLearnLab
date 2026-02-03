@@ -19,8 +19,9 @@ from .views import (BookListView, BookDetailView, BookCreateView, BookUpdateView
 
 urlpatterns = [
     path("books/", BookListView.as_view(), name="book-list"),  # URL for listing all books
-    path("books/<int:pk>/", BookDetailView.as_view(), name="book-detail"),  # URL for retrieving a single book by its primary key (id)
+    path("books/", BookDetailView.as_view(), name="book-detail"),  # URL for retrieving a single book by its primary key (id)
     path("books/create/", BookCreateView.as_view(), name="book-create"),  # URL for creating a new book
-    path("books/<int:pk>/update/", BookUpdateView.as_view(), name="book-update"),  # URL for updating an existing book by its primary key (id)
-    path("books/<int:pk>/delete/", BookDeleteView.as_view(), name="book-delete"),  # URL for deleting an existing book by its primary key (id)
+    path("books/update/", BookUpdateView.as_view(), name="book-update"),  # URL for updating an existing book by its primary key (id)
+    path("books/delete/", BookDeleteView.as_view(), name="book-delete"),  # URL for deleting an existing book by its primary key (id)
 ]
+ 
