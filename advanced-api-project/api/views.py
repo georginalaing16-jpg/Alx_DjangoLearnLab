@@ -142,7 +142,7 @@ class BookListView(generics.ListAPIView):
 
 
 from rest_framework import generics, permissions, filters
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
 from .models import Book
 from .serializers import BookSerializer
 
@@ -152,7 +152,7 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]  # Allow any user to view the list
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [rest_framework.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = {'title':['exact', 'icontains'], 'publication_year':['exact', 'gte', 'lte'], 'author':['exact', 'icontains']}   # Enable filtering by author and published year
     search_fields = ['title', 'author']  # Enable search by title and author
     ordering_fields = ['title', 'published_year']  # Enable ordering by published date and title
