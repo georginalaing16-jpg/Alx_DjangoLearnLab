@@ -124,3 +124,37 @@ class BookDeleteView(generics.DestroyAPIView):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response({"message": "Book deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    
+
+
+from rest_framework import generics, permissions, filters
+from .models import Book
+from .serializers import BookSerializer
+
+# List all books with search capabilities
+class BookListView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.AllowAny]  # Allow any user to view the list
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'author']  # Enable search by title and author
+
+
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import Book
+from .serializers import BookSerializer
+
+# Retrieve a list of books with filtering, searching, and ordering capabilities
+class BookListView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.AllowAny]  # Allow any user to view the list
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = {'title':['exact', 'icontains'], 'publication_year':['exact', 'gte', 'lte'], 'author':['exact', 'icontains']}   # Enable filtering by author and published year
+    search_fields = ['title', 'author']  # Enable search by title and author
+    ordering_fields = ['title', 'published_year']  # Enable ordering by published date and title
+    ordering = ['title']  # Default ordering by title
+
