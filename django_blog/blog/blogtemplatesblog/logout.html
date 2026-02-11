@@ -2,7 +2,7 @@
 {% block title %}Logged out{% endblock %}
 
 {% block content %}
-  <h1>You’re logged out</h1>
-  <p class="muted">Thanks for visiting.</p>
-  <p><a class="btn" href="{% url 'login' %}">Login again</a></p>
+<h1>You’re logged out</h1>
+<p><a class="btn" href="{% url 'blog:login' %}">Login again</a></p>
 {% endblock %}
+
