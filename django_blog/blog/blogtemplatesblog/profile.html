@@ -1,19 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
-</head>
-<body>
+{% extends "blog/base.html" %}
+{% block title %}Profile{% endblock %}
 
-<h1>Login</h1>
+{% block content %}
+<h1>Your Profile</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Profile</button>
+<div class="card">
+  <p><strong>Username:</strong> {{ request.user.username }}</p>
+  <p><strong>Email:</strong> {{ request.user.email }}</p>
+</div>
+
+<h2>Edit details</h2>
+
+{% if form.non_field_errors %}
+  <div class="alert error">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<form method="post" class="form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn">Save changes</button>
 </form>
+{% endblock %}
 
-</body>
-</html>
