@@ -1,22 +1,14 @@
 {% extends "blog/base.html" %}
-{% block title %}Login{% endblock %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
+<script defer src="{% static 'blog/js/script.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-<h1>Login</h1>
-
-{% if form.non_field_errors %}
-  <div class="alert error">
-    {{ form.non_field_errors }}
-  </div>
-{% endif %}
-
-<form method="post" class="form">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn">Login</button>
-</form>
-
-<p class="muted">No account? <a href="{% url 'blog:register' %}">Register</a></p>
+<!-- your login form -->
 {% endblock %}
+
 
 
