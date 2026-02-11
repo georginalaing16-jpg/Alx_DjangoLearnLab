@@ -1,0 +1,24 @@
+{% extends "blog/base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<article class="card">
+  <h1>{{ post.title }}</h1>
+  <p class="muted">
+    By {{ post.author.username }} • {{ post.published_date }}
+  </p>
+
+  <div class="post-content">
+    {{ post.content|linebreaks }}
+  </div>
+</article>
+
+<p>
+  <a class="btn" href="{% url 'blog:post_list' %}">Back to posts</a>
+
+  {% if request.user.is_authenticated and request.user == post.author %}
+    <a class="btn" href="{% url 'blog:post_update' post.pk %}">Edit</a>
+    <a class="btn" href="{% url 'blog:post_delete' post.pk %}">Delete</a>
+  {% endif %}
+</p>
+{% endblock %}

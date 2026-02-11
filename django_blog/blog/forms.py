@@ -40,3 +40,18 @@ class UserUpdateForm(forms.ModelForm):
         if qs.exists():
             raise forms.ValidationError("This email is already in use.")
         return email
+
+
+from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ("title", "content")
+
+    def clean_title(self):
+        title = self.cleaned_data["title"].strip()
+        if len(title) < 3:
+            raise forms.ValidationError("Title must be at least 3 characters long.")
+        return title
