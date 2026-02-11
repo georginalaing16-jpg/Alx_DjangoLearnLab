@@ -100,3 +100,64 @@ class PostDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("blog:post_list")
+
+
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404
+from django.views.generic import CreateView, UpdateView, DeleteView
+
+from .models import Post, Comment
+from .forms import CommentForm
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Ensure the post exists
+        self.post = get_object_or_404(Post, pk=kwargs["post_id"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.post = self.post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["post"] = self.post
+        ctx["mode"] = "create"
+        return ctx
+
+
+class CommentAuthorRequiredMixin(UserPassesTestMixin):
+    raise_exception = True  # return 403 instead of redirect loops
+
+    def test_func(self):
+        comment = self.get_object()
+        return comment.author == self.request.user
+
+
+class CommentUpdateView(LoginRequiredMixin, CommentAuthorRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["post"] = self.object.post
+        ctx["mode"] = "update"
+        return ctx
+
+
+class CommentDeleteView(LoginRequiredMixin, CommentAuthorRequiredMixin, DeleteView):
+    model = Comment
+    template_name = "blog/comment_confirm_delete.html"
+
+    def get_success_url(self):
+        # after delete, go back to the post detail page
+        return self.object.post.get_absolute_url()

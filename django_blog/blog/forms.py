@@ -55,3 +55,19 @@ class PostForm(forms.ModelForm):
         if len(title) < 3:
             raise forms.ValidationError("Title must be at least 3 characters long.")
         return title
+
+
+
+from django import forms
+from .models import Comment
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ("content",)
+
+    def clean_content(self):
+        content = self.cleaned_data["content"].strip()
+        if len(content) < 2:
+            raise forms.ValidationError("Comment is too short.")
+        return content

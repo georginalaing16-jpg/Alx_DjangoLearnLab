@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+{% block title %}{% if mode == "update" %}Edit Comment{% else %}New Comment{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% if mode == "update" %}Edit Comment{% else %}Add Comment{% endif %}</h1>
+
+<p>
+  On post:
+  <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+</p>
+
+{% if form.non_field_errors %}
+  <div class="alert error">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<form method="post" class="form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn">Save</button>
+  <a class="btn" href="{% url 'blog:post_detail' post.pk %}">Cancel</a>
+</form>
+{% endblock %}

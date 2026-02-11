@@ -22,3 +22,45 @@
   {% endif %}
 </p>
 {% endblock %}
+<hr>
+
+<section class="comments">
+  <h2>Comments</h2>
+
+  {% if post.comments.all %}
+    <ul class="comment-list">
+      {% for comment in post.comments.all %}
+        <li class="card">
+          <p class="muted">
+            <strong>{{ comment.author.username }}</strong>
+            • {{ comment.created_at }}
+            {% if comment.updated_at and comment.updated_at != comment.created_at %}
+              (edited {{ comment.updated_at }})
+            {% endif %}
+          </p>
+
+          <p>{{ comment.content|linebreaks }}</p>
+
+          {% if request.user.is_authenticated and request.user == comment.author %}
+            <p>
+              <a class="btn" href="{% url 'blog:comment_update' comment.pk %}">Edit</a>
+              <a class="btn" href="{% url 'blog:comment_delete' comment.pk %}">Delete</a>
+            </p>
+          {% endif %}
+        </li>
+      {% empty %}
+        <p>No comments yet.</p>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if request.user.is_authenticated %}
+    <p>
+      <a class="btn" href="{% url 'blog:comment_create' post.pk %}">Add a comment</a>
+    </p>
+  {% else %}
+    <p class="muted">
+      <a href="{% url 'blog:login' %}">Login</a> to add a comment.
+    </p>
+  {% endif %}
+</section>
