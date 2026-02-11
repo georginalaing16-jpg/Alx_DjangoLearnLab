@@ -1,8 +1,21 @@
-{% extends "blog/base.html" %}
-{% block title %}Logged out{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
+</head>
+<body>
 
-{% block content %}
-<h1>You’re logged out</h1>
-<p><a class="btn" href="{% url 'blog:login' %}">Login again</a></p>
-{% endblock %}
+<h1>Login</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
+
 
