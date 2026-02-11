@@ -7,7 +7,24 @@
 {% endblock %}
 
 {% block content %}
-<!-- your login form -->
+<h1>Login</h1>
+
+{% if form.non_field_errors %}
+  <div class="alert error">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+<form method="post" class="form">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit" class="btn">Login</button>
+</form>
+
+<p class="muted">
+  Don’t have an account? <a href="{% url 'blog:register' %}">Register</a>
+</p>
 {% endblock %}
 
 

@@ -7,7 +7,24 @@
 {% endblock %}
 
 {% block content %}
-<!-- your register form -->
+<h1>Create account</h1>
+
+{% if form.non_field_errors %}
+  <div class="alert error">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+<form method="post" class="form">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit" class="btn">Register</button>
+</form>
+
+<p class="muted">
+  Already have an account? <a href="{% url 'blog:login' %}">Login</a>
+</p>
 {% endblock %}
 
 
