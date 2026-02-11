@@ -5,15 +5,15 @@ This project extends the django_blog application with full blog post management 
 
 # Features
 
-View all posts – /posts/ (public)
+View all post – /post/ (public)
 
-View post details – /posts/<pk>/ (public)
+View post details – /post/<pk>/ (public)
 
-Create posts – /posts/new/ (login required)
+Create post – /post/new/ (login required)
 
-Edit posts – /posts/<pk>/edit/ (author only)
+Edit post – /post/<pk>/edit/ (author only)
 
-Delete posts – /posts/<pk>/delete/ (author only)
+Delete post – /post/<pk>/delete/ (author only)
 
 
 # Permissions
