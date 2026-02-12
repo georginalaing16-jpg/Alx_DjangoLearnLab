@@ -44,17 +44,24 @@ class UserUpdateForm(forms.ModelForm):
 
 from django import forms
 from .models import Post
+from taggit.forms import TagWidget
+
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ("title", "content")
+        fields = ["title", "content", "tags"]
+
+        widgets = {
+            "tags": TagWidget(),
+        }
 
     def clean_title(self):
         title = self.cleaned_data["title"].strip()
         if len(title) < 3:
             raise forms.ValidationError("Title must be at least 3 characters long.")
         return title
+
 
 
 
