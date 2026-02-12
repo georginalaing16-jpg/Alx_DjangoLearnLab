@@ -23,6 +23,13 @@
         <p>
           {{ post.content|truncatechars:160 }}
         </p>
+{% if post.tags.all %}
+  <p class="tags">
+    {% for tag in post.tags.all %}
+      <a class="tag" href="{% url 'blog:posts_by_tag' tag.name %}">#{{ tag.name }}</a>
+    {% endfor %}
+  </p>
+{% endif %}
 
         <a class="btn" href="{% url 'blog:post_detail' post.pk %}">Read more</a>
       </li>

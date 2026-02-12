@@ -71,3 +71,46 @@ class CommentForm(forms.ModelForm):
         if len(content) < 2:
             raise forms.ValidationError("Comment is too short.")
         return content
+
+
+from django import forms
+from .models import Post, Tag
+
+class PostForm(forms.ModelForm):
+    tags = forms.CharField(
+        required=False,
+        help_text="Enter tags separated by commas (e.g., django, python, web)."
+    )
+
+    class Meta:
+        model = Post
+        fields = ("title", "content", "tags")
+
+    def clean_title(self):
+        title = self.cleaned_data["title"].strip()
+        if len(title) < 3:
+            raise forms.ValidationError("Title must be at least 3 characters long.")
+        return title
+
+    def clean_tags(self):
+        raw = self.cleaned_data.get("tags", "")
+        # Split by comma, strip spaces, remove empties, make lowercase
+        tags = [t.strip().lower() for t in raw.split(",") if t.strip()]
+        # Optional: prevent too many tags
+        if len(tags) > 10:
+            raise forms.ValidationError("Please use 10 tags or fewer.")
+        return tags
+
+    def save(self, commit=True):
+        post = super().save(commit=commit)
+        # tags cleaned as list
+        tag_names = self.cleaned_data.get("tags", [])
+
+        # Attach tags (create if needed)
+        tag_objs = []
+        for name in tag_names:
+            tag, _ = Tag.objects.get_or_create(name=name)
+            tag_objs.append(tag)
+
+        post.tags.set(tag_objs)
+        return post

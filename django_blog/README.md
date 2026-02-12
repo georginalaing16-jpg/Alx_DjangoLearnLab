@@ -1,4 +1,51 @@
-## Blog Post Management - Documentation
+### TASK 2
+#How the authentication flow works
+# Registration
+- User visits /register/
+- RegisterForm (extends UserCreationForm) collects username, email, password1, password2
+- On success, the user is created and immediately logged in via login(request, user)
+
+# Login
+- User visits /login/
+- Django’s built-in LoginView authenticates and starts a session
+
+# Profile
+- User visits /profile/
+- Protected by @login_required
+- GET: show profile edit form prefilled with current username/email
+- POST: validate + save changes, show success/error message
+
+# Logout
+
+- User posts to /logout/
+- Django’s built-in LogoutView ends the session
+
+# Files' functions
+blog/forms.py
+- RegisterForm: creates users + validates unique email
+- UserUpdateForm: updates username/email safely
+
+blog/views.py
+- register_view: custom registration flow
+- profile_view: view + edit profile details
+
+blog/urls.py
+- routes /login/ /logout/ /register/ /profile/
+
+blog/templates/blog/*.html
+- UI + CSRF protection + error display + success messages
+
+# How to test each feature
+- Registration: fill form → redirects to profile
+- Login: use created credentials → redirects to profile
+- Logout: click logout button → session ends
+- Profile edit: change email → saved and visible after refresh
+- Security: confirm profile requires login; confirm CSRF present in page source
+
+
+
+### TASK 3
+#Blog Post Management - Documentation
 This project extends the django_blog application with full blog post management using Django class-based views and authentication.
  
 # Features
@@ -35,8 +82,8 @@ All templates extend base.html and use the project’s CSS.
 
 
 
-
-## Comment System
+### TASK 4
+#Comment System
 Each blog post supports a list of comments. All users can read comments, but only authenticated users can create comments. Only the comment author can edit or delete their own comments.
 
 # Model
@@ -68,3 +115,37 @@ Comment fields:
 3. Edit your comment and confirm updated_at changes.
 4. Delete your comment and confirm it is removed.
 5. Login as another user and verify you cannot edit/delete someone else’s comment (403).
+
+
+
+
+### TASK 5
+#Tagging and Search
+# Tagging
+Posts support multiple tags via a ManyToMany relationship between `Post` and `Tag`.
+Tags are entered in the post form as a comma-separated list (e.g., `django, python, web`).
+
+**Rules:**
+- Tags are normalized to lowercase.
+- New tags are created automatically if they don’t exist.
+- Tags are optional.
+
+# Viewing Tags
+Tags are displayed on the post list and post detail pages.
+Each tag links to a filtered list of posts:
+
+- `/tags/<tag_name>/` shows all posts with that tag.
+
+# Search
+Users can search posts by:
+- title
+- content
+- tag names
+
+Search is handled through `/search/?q=<query>` using Django `Q` objects and `icontains`.
+Results are displayed on the search results page.
+
+# How to Use
+1. Create or edit a post and add tags in the tags field (comma-separated).
+2. Click a tag (e.g., `#django`) to view tagged posts.
+3. Use the search bar to find posts by keywords or tag names.

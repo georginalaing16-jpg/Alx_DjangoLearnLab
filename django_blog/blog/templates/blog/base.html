@@ -10,7 +10,10 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header>
+    <header></header><form method="get" action="{% url 'blog:post_search' %}" class="search-form">
+  <input type="text" name="q" placeholder="Search posts..." value="{{ request.GET.q }}">
+  <button type="submit" class="btn">Search</button>
+</form>
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>

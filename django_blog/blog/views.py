@@ -96,6 +96,7 @@ class PostUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+
 class PostDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
@@ -161,3 +162,45 @@ class CommentDeleteView(LoginRequiredMixin, CommentAuthorRequiredMixin, DeleteVi
     def get_success_url(self):
         # after delete, go back to the post detail page
         return self.object.post.get_absolute_url()
+
+
+from django.db.models import Q
+from django.views.generic import ListView
+from .models import Post, Tag
+
+class PostSearchView(ListView):
+    model = Post
+    template_name = "blog/search_results.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        q = self.request.GET.get("q", "").strip()
+        qs = Post.objects.all().order_by("-published_date")
+        if not q:
+            return qs.none()
+
+        return qs.filter(
+            Q(title__icontains=q) |
+            Q(content__icontains=q) |
+            Q(tags__name__icontains=q)
+        ).distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["query"] = self.request.GET.get("q", "").strip()
+        return ctx
+
+
+class PostsByTagView(ListView):
+    model = Post
+    template_name = "blog/posts_by_tag.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_name = self.kwargs["tag_name"].strip().lower()
+        return Post.objects.filter(tags__name=tag_name).order_by("-published_date")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["tag_name"] = self.kwargs["tag_name"]
+        return ctx
