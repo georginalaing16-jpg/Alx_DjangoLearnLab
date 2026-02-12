@@ -134,7 +134,7 @@ Tags are entered in the post form as a comma-separated list (e.g., `django, pyth
 Tags are displayed on the post list and post detail pages.
 Each tag links to a filtered list of posts:
 
-- `/tags/<tag_name>/` shows all posts with that tag.
+- `/tags/<tag_slug>/` shows all posts with that tag.
 
 # Search
 Users can search posts by:
