@@ -81,7 +81,7 @@ class LikePostView(APIView):
         post = generics.get_object_or_404(Post, pk=pk)
 
         # Prevent liking multiple times
-        like, created = Like.objects.get_or_create(post=post, user=request.user)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -103,7 +103,7 @@ class UnlikePostView(APIView):
     def post(self, request, pk):
         post = generics.get_object_or_404(Post, pk=pk)
 
-        deleted, _ = Like.objects.get_or_create(post=post, user=request.user).delete()
+        deleted, _ = Like.objects.get_or_create(user=request.user, post=post).delete()
         if deleted == 0:
             return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
