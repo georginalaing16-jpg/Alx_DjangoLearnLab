@@ -57,7 +57,19 @@ class FollowUserView(generics.GenericAPIView):
 
         target = generics.get_object_or_404(CustomUser, id=user_id)
         request.user.following.add(target)
+
+        from notifications.models import Notification
+
+        if target != request.user:
+            Notification.objects.create(
+             recipient=target,
+             actor=request.user,
+             verb="started following you",
+             target=request.user,
+            )
         return Response({"detail": f"You are now following {target.username}."}, status=status.HTTP_200_OK)
+
+
 
 
 class UnfollowUserView(generics.GenericAPIView):

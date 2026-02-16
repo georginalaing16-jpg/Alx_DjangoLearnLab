@@ -5,6 +5,7 @@ from .models import Post, Comment
 class PostSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source="author.username", read_only=True)
     comments_count = serializers.IntegerField(source="comments.count", read_only=True)
+    likes_count = serializers.IntegerField(source="likes.count", read_only=True)
 
     class Meta:
         model = Post
@@ -15,10 +16,11 @@ class PostSerializer(serializers.ModelSerializer):
             "title",
             "content",
             "comments_count",
+            "likes_count",
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["id", "author", "author_username", "comments_count", "created_at", "updated_at"]
+        read_only_fields = ["id", "author", "author_username", "comments_count", "likes_count", "created_at", "updated_at"]
 
 
 class CommentSerializer(serializers.ModelSerializer):
