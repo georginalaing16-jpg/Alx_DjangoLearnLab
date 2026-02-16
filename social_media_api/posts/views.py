@@ -103,7 +103,7 @@ class UnlikePostView(APIView):
     def post(self, request, pk):
         post = generics.get_object_or_404(Post, pk=pk)
 
-        deleted, _ = Like.objects.filter(post=post, user=request.user).delete()
+        deleted, _ = Like.objects.get_or_create(post=post, user=request.user).delete()
         if deleted == 0:
             return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
