@@ -1,0 +1,39 @@
+from rest_framework import viewsets, permissions, filters
+from .models import Post, Comment
+from .serializers import PostSerializer, CommentSerializer
+from .permissions import IsOwnerOrReadOnly
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.select_related("author").all().order_by("-created_at")
+    serializer_class = PostSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    # Search/filtering by title/content
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "content"]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.select_related("author", "post").all().order_by("-created_at")
+    serializer_class = CommentSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        """
+        Optional filter: /api/comments/?post=<post_id>
+        """
+        qs = super().get_queryset()
+        post_id = self.request.query_params.get("post")
+        if post_id:
+            qs = qs.filter(post_id=post_id)
+        return qs
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
