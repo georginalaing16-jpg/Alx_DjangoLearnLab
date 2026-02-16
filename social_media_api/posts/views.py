@@ -66,11 +66,10 @@ class FeedView(ListAPIView):
 
 
 
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.shortcuts import get_object_or_404
-
+ 
 from .models import Post, Like
 from notifications.models import Notification
 
@@ -79,7 +78,7 @@ class LikePostView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
 
         # Prevent liking multiple times
         like, created = Like.objects.get_or_create(post=post, user=request.user)
@@ -102,7 +101,7 @@ class UnlikePostView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
 
         deleted, _ = Like.objects.filter(post=post, user=request.user).delete()
         if deleted == 0:
