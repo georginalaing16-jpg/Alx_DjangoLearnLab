@@ -290,3 +290,19 @@ social_media_api/
     0001_initial.py
   README.md
 ```
+
+# Posts
+GET /api/posts/ list (paginated)
+POST /api/posts/ create (auth)
+GET /api/posts/{id}/ retrieve
+PATCH/PUT /api/posts/{id}/ update (owner only)
+DELETE /api/posts/{id}/ delete (owner only)
+GET /api/posts/?search=<text> search title/content
+
+# Comments
+GET /api/comments/ list (paginated)
+POST /api/comments/ create (auth)
+GET /api/comments/{id}/ retrieve
+PATCH/PUT /api/comments/{id}/ update (owner only)
+DELETE /api/comments/{id}/ delete (owner only)
+GET /api/comments/?post=<post_id> filter by post
