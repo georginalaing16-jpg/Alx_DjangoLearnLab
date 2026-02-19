@@ -198,9 +198,9 @@ Body (JSON):
 
 ```json
 {
-  "username": "alice",
-  "email": "alice@example.com",
-  "password": "StrongPass123",
+  "username": "name",
+  "email": "email@example.com",
+  "password": "StrongPassword",
   "bio": "Hello!"
 }
 ```
@@ -220,8 +220,8 @@ Response:
 
 ```json
 {
-  "username": "alice",
-  "password": "StrongPass123"
+  "username": "name",
+  "password": "StrongPassword"
 }
 ```
 
