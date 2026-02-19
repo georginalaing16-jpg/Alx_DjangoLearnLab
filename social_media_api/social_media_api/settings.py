@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-only-secret")
 DEBUG = False
 
 DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
+    "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 # Security
@@ -45,7 +45,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Static files compression with WhiteNoise
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = ["social-media-api.onrender.com"]
 
 
 # Application definition
@@ -115,6 +115,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'PORT': '5432'
     }
 }
 
